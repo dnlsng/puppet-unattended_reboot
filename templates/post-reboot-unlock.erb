@@ -4,3 +4,6 @@ Before=cron.service
 
 [Service]
 ExecStart=/usr/bin/locksmithctl -endpoint='<%= @etcd_endpoints.join(',') %>' unlock '<%= @fqdn %>' 2>&1 | /usr/bin/logger -s -t post-reboot-unlock
+
+[Install]
+WantedBy=multi-user.target
