@@ -1,15 +1,9 @@
-# post-reboot-unlock
-#
-description "Release the unattended reboot mutex on boot"
-start on started networking
+[Unit]
+Description=Release the reboot lock for unattended reboot (Mannaged by puppet)
+Before=cron.service
 
-task
-console log
+[Service]
+ExecStart=/usr/bin/locksmithctl -endpoint='<%= @etcd_endpoints.join(',') %>' unlock '<%= @fqdn %>' 2>&1 | /usr/bin/logger -s -t post-reboot-unlock
 
-# Tell Upstart that an exit code of 0 or 1 is OK
-# locksmithctl will return exit code 1 if no lock exists
-normal exit 0 1
-
-script
-  exec /usr/bin/locksmithctl -endpoint='<%= @etcd_endpoints.join(',') %>' unlock '<%= @fqdn %>' 2>&1 | /usr/bin/logger -s -t post-reboot-unlock
-end script
+[Install]
+WantedBy=multi-user.target

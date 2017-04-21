@@ -121,11 +121,25 @@ class unattended_reboot (
 
   # Upstart script to release reboot lock on boot
   file { '/etc/init/post-reboot-unlock.conf':
+    ensure  => absent,
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'root',
+    content => template('unattended_reboot/post-reboot-unlock.erb'),
+  }
+
+  file { '/etc/systemd/system/post-reboot-unlock.service':
     ensure  => $file_ensure,
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
     content => template('unattended_reboot/post-reboot-unlock.erb'),
+  }
+
+  service { 'post-reboot-unlock':
+    ensure => running,
+    enable => true,
+    require => File['/etc/systemd/system/post-reboot-unlock.service'],
   }
 
   if $manage_package {
