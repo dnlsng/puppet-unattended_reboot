@@ -80,6 +80,7 @@ class unattended_reboot (
   $cron_minute = '*/5',
   $enabled = false,
   $etcd_endpoints = [ 'http://localhost:2379', 'http://localhost:4001' ],
+  $locksmith_group = '',
   $manage_package = true,
   $pre_reboot_scripts_directory = '',
   $run_unattended_upgrade = false,
@@ -137,8 +138,8 @@ class unattended_reboot (
   }
 
   service { 'post-reboot-unlock':
-    ensure => running,
-    enable => true,
+    ensure  => running,
+    enable  => true,
     require => File['/etc/systemd/system/post-reboot-unlock.service'],
   }
 

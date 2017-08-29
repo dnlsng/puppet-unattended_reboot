@@ -1,9 +1,11 @@
 [Unit]
-Description=Release the reboot lock for unattended reboot (Mannaged by puppet)
-Before=cron.service
+Description=Release the reboot lock for unattended reboot (Managed by puppet)
+After=network-online.target
 
 [Service]
-ExecStart=/usr/bin/locksmithctl -endpoint='<%= @etcd_endpoints.join(',') %>' unlock '<%= @fqdn %>' 2>&1 | /usr/bin/logger -s -t post-reboot-unlock
+Type=oneshot
+ExecStart=/usr/bin/locksmithctl -endpoint='<%= @etcd_endpoints.join(',') %>' --group='<%= @locksmith_group %>' unlock '<%= @fqdn %>' 2>&1 | /usr/bin/logger -s -t post-reboot-unlock
+SuccessExitStatus=1
 
 [Install]
 WantedBy=multi-user.target

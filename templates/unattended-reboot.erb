@@ -23,7 +23,7 @@ if [ $? -ne 0 ]; then
 fi
 
 <% end -%>
-/usr/bin/locksmithctl -endpoint='<%= @etcd_endpoints.join(',') %>' lock '<%= @fqdn %>'
+/usr/bin/locksmithctl -endpoint='<%= @etcd_endpoints.join(',') %>' --group='<%= @locksmith_group %>' lock '<%= @fqdn %>'
 
 if [ $? -ne 0 ]; then
   echo "Couldn't obtain lock for <%= @fqdn %>" >&2
@@ -37,7 +37,7 @@ if [ $? -ne 0 ]; then
   echo 'One of the pre-reboot scripts returned a non-zero exit code' >&2
 
   # Try to release lock
-  /usr/bin/locksmithctl -endpoint='<%= @etcd_endpoints.join(',') %>' unlock '<%= @fqdn %>'
+  /usr/bin/locksmithctl -endpoint='<%= @etcd_endpoints.join(',') %>' --group='<%= @locksmith_group %>' unlock '<%= @fqdn %>'
   if [ $? -ne 0 ]; then
     echo 'Unable to release reboot lock' >&2
   fi
