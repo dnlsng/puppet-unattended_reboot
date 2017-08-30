@@ -138,7 +138,6 @@ class unattended_reboot (
   }
 
   service { 'post-reboot-unlock':
-    ensure  => running,
     enable  => true,
     require => File['/etc/systemd/system/post-reboot-unlock.service'],
   }
