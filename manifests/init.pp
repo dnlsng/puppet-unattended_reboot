@@ -73,6 +73,7 @@
 class unattended_reboot (
   $check_scripts_directory = '',
   $cron_env_vars = [],
+  $cron_command = '/usr/local/bin/unattended-reboot',
   $cron_month = '*',
   $cron_monthday = '*',
   $cron_weekday = '*',
@@ -167,7 +168,7 @@ class unattended_reboot (
     minute      => $cron_minute,
     require     => Package['update-notifier-common'],
     environment => $cron_env_vars,
-    command     => '/usr/local/bin/unattended-reboot',
+    command     => $cron_command,
   }
 
   # Run unattended upgrade to maximise the chance that an upgraded package is
