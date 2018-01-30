@@ -4,6 +4,7 @@ After=network-online.target
 
 [Service]
 Type=oneshot
+ExecStartPre=/bin/sleep 5
 ExecStart=/usr/bin/locksmithctl -endpoint='<%= @etcd_endpoints.join(',') %>' --group='<%= @locksmith_group %>' unlock '<%= @fqdn %>' 2>&1 | /usr/bin/logger -s -t post-reboot-unlock
 SuccessExitStatus=1
 
